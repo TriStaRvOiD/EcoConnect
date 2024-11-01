@@ -8,11 +8,11 @@ This project in general is a collaborative effort by the SustainHive team, dedic
 
 ## Features
 
-* User Authentication: Secure login and registration using Firebase Authentication.
-* Event Listings: Browse a list of upcoming environmental events in your area.
-* Event Creation: Create and manage your own eco-events.
+* User Authentication: Login and registration using Firebase Authentication.
+* Event Listings: Browse a list of upcoming environmental events in your area (Ongoing).
+* Event Creation: Creation and management of events.
 * Real-time Data: Events are stored and updated using Firebase Firestore.
-* Biometric Authentication: Secure logins with biometrics and passkeys.
+* Biometric Authentication: Secure logins with biometrics and passkeys (Currently unavailable).
 * Jetpack Compose UI: A clean and modern UI designed using Jetpack Compose.
 
 ## Configuration
