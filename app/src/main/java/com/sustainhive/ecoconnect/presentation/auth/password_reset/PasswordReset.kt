@@ -1,4 +1,4 @@
-package com.sustainhive.ecoconnect.presentation.auth
+package com.sustainhive.ecoconnect.presentation.auth.password_reset
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,18 +8,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,30 +30,36 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.sustainhive.ecoconnect.R
 import com.sustainhive.ecoconnect.presentation.theme.JosefinSans
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordResetScreen(
-    modifier: Modifier = Modifier,
+    email: String,
+    isLoading: Boolean,
+    onEmailChange: (String) -> Unit,
+    onResetPassword: () -> Unit,
     navigateBack: () -> Unit
 ) {
-    var email by remember {
-        mutableStateOf("")
-    }
-
     Scaffold(
         topBar = {
-            TopAppBar(title = {},
+            TopAppBar(
+                title = {},
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Back button"
+                            painter = painterResource(R.drawable.back),
+                            contentDescription = "Go back"
                         )
                     }
-                })
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
@@ -65,25 +73,22 @@ fun PasswordResetScreen(
             Text(
                 text = "Reset your password",
                 fontSize = MaterialTheme.typography.headlineSmall.fontSize,
-                fontFamily = JosefinSans
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "Enter your email address, and we will send you a link to reset the password of your account.",
+                text = "Enter your email address, and we will send a link to reset the password of your account.",
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 color = Color.Gray,
-                fontFamily = JosefinSans
             )
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = email,
-                onValueChange = {
-                    email = it
-                },
+                onValueChange = onEmailChange,
                 label = {
-                    Text(text = "Email address", fontFamily = JosefinSans)
-                }
+                    Text(text = "Email address")
+                },
+                textStyle = LocalTextStyle.current.copy()
             )
             Spacer(modifier = Modifier.height(12.dp))
             Row(
@@ -92,12 +97,20 @@ fun PasswordResetScreen(
                 horizontalArrangement = Arrangement.End
             ) {
                 OutlinedButton(
-                    onClick = navigateBack
+                    onClick = onResetPassword,
+                    enabled = !isLoading
                 ) {
                     Text(
                         text = "Submit",
-                        fontFamily = JosefinSans
                     )
+                    if (isLoading) {
+                        Spacer(modifier = Modifier.width(6.dp))
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(18.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                        )
+                    }
                 }
             }
         }

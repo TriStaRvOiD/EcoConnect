@@ -1,119 +1,145 @@
 package com.sustainhive.ecoconnect.presentation.home
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
+import com.sustainhive.ecoconnect.data.event.model.Event
+import com.sustainhive.ecoconnect.presentation.util.EventWithOrganizerName
+import com.sustainhive.ecoconnect.presentation.util.components.EmptyListColumn
+import com.sustainhive.ecoconnect.presentation.util.components.EventCard
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, logOut: () -> Unit) {
+fun SharedTransitionScope.HomeScreen(
+    eventsWithOrganizers: List<EventWithOrganizerName>,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    isRefreshing: Boolean,
+    paddingValues: PaddingValues,
+    onRefresh: () -> Unit,
+    navigateToEventDetails: (EventWithOrganizerName) -> Unit,
+    logOut: () -> Unit
+) {
+    val pullToRefreshState = rememberPullToRefreshState()
 
-    val notes = remember { mutableStateListOf<Note>() }
-    var newNoteContent by remember { mutableStateOf("") }
-    val db = FirebaseFirestore.getInstance()
-    val user = FirebaseAuth.getInstance().currentUser
-
-    // Fetch notes from Firestore
-    LaunchedEffect(Unit) {
-        try {
-            if (user != null) {
-                val snapshot = db.collection("notes")
-                    .whereEqualTo("ownerId", user.uid) // Only fetch notes for the current user
-                    .get().await()
-
-                val fetchedNotes = snapshot.documents.map { doc ->
-                    Note(
-                        id = doc.id,
-                        ownerId = doc.getString("ownerId") ?: "",
-                        content = doc.getString("content") ?: ""
-                    )
-                }
-                notes.addAll(fetchedNotes)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = paddingValues.calculateTopPadding()),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .padding(start = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f)
-            ) {
-                items(notes.size) { index ->
-                    Text(text = notes[index].content, modifier = Modifier.padding(8.dp))
-                }
-            }
-            OutlinedTextField(
-                value = newNoteContent,
-                onValueChange = { newNoteContent = it },
-                label = { Text("Enter a new note") },
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
+            Text(
+                text = "Eco-Connect",
+                style = MaterialTheme.typography.headlineSmall,
             )
-            Button(
-                onClick = {
-                    if (newNoteContent.isNotEmpty() && user != null) {
-                        // Add the note to Firestore
-                        val newNote = hashMapOf(
-                            "ownerId" to user.uid,
-                            "content" to newNoteContent
-                        )
-                        db.collection("notes").add(newNote)
-                            .addOnSuccessListener { docRef ->
-                                // Add the new note to the list
-                                notes.add(Note(id = docRef.id, ownerId = user.uid, content = newNoteContent))
-                                newNoteContent = "" // Clear the input field
-                            }
-                            .addOnFailureListener {
-                                // Handle failure
-                                it.printStackTrace()
-                            }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth().padding(8.dp)
-            ) {
-                Text("Add Note")
-            }
-            Spacer(modifier = Modifier.height(6.dp))
             OutlinedButton(
                 onClick = logOut
             ) {
-                Text("Log out")
+                Text(text = "Log Out")
+            }
+        }
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
+            modifier = Modifier
+                .fillMaxHeight(),
+            state = pullToRefreshState,
+        ) {
+            if (!isRefreshing) {
+                if (eventsWithOrganizers.isEmpty()) {
+                    EmptyListColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 60.dp)
+                    )
+                } else {
+                    Column(
+                        modifier = Modifier.fillMaxSize().verticalScroll(
+                            rememberScrollState()
+                        )
+                    ) {
+                        LazyRow(
+                            modifier = Modifier.fillMaxSize(),
+                            contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding())
+                        ) {
+                            items(eventsWithOrganizers) { eventWithOrganizer ->
+                                val imageList = eventWithOrganizer.event.images
+                                val imageUrl = eventWithOrganizer.event.imageUrl
+                                EventCard(
+                                    imageModifier = Modifier.sharedElement(
+                                        state = rememberSharedContentState(
+                                            key = if (imageList.isNotEmpty())
+                                                imageList[0].url
+                                            else if (imageUrl.isNotEmpty())
+                                                imageUrl
+                                            else "null"
+                                        ),
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        boundsTransform = { _, _ ->
+                                            tween(durationMillis = 500)
+                                        }
+                                    ),
+                                    titleModifier = Modifier.sharedBounds(
+                                        sharedContentState = rememberSharedContentState(
+                                            key = "title/${eventWithOrganizer.event.id}/${eventWithOrganizer.event.title}"
+                                        ),
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        boundsTransform = { _, _ ->
+                                            tween(durationMillis = 500)
+                                        }
+                                    ),
+                                    organizerTextModifier = Modifier.sharedBounds(
+                                        sharedContentState = rememberSharedContentState(
+                                            key = "organizerText/${eventWithOrganizer.event.id}/${eventWithOrganizer.organizerName}"
+                                        ),
+                                        animatedVisibilityScope = animatedVisibilityScope,
+                                        boundsTransform = { _, _ ->
+                                            tween(durationMillis = 500)
+                                        }
+                                    ),
+                                    event = eventWithOrganizer.event,
+                                    organizer = eventWithOrganizer.organizerName,
+                                    onClick = {
+                                        navigateToEventDetails(eventWithOrganizer)
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
-
-// Firestore data class
-data class Note(
-    val id: String,
-    val ownerId: String,
-    val content: String
-)

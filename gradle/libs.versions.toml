@@ -1,19 +1,18 @@
 [versions]
-androidGradleVersion = "8.6.0"
-auth0Version = "2.11.0"
-coilVersion = "2.7.0"
-jwtdecodeVersion = "2.0.2"
-kotlin = "2.0.10"
+androidGradleVersion = "8.7.2"
+coilVersion = "3.0.0-rc02"
+kotlin = "2.0.21"
 daggerHiltVersion = "2.52"
+recaptchaVersion = "18.7.0-beta01"
 secretsPluginVersion = "2.0.1"
-kspVersion = "2.0.10-1.0.24"
+kspVersion = "2.0.21-1.0.26"
 accompanistPermissionsVersion = "0.34.0"
-activityComposeVersion = "1.9.2"
+activityComposeVersion = "1.9.3"
 androidVersion = "11.2.2"
 vicoComposeVersion = "2.0.0-alpha.14"
-composeBomVersion = "2024.09.01"
+composeBomVersion = "2024.10.01"
 composeCalendarVersion = "2.5.1"
-coreKtxVersion = "1.13.1"
+coreKtxVersion = "1.15.0"
 coreSplashscreenVersion = "1.0.1"
 datastorePreferencesVersion = "1.1.1"
 desugar_jdk_libsVersion = "2.1.2"
@@ -22,24 +21,25 @@ hiltAndroidVersion = "2.52"
 hiltNavigationComposeVersion = "1.2.0"
 junit = "1.2.1"
 junitVersion = "4.13.2"
-lifecycleRuntimeKtxVersion = "2.8.5"
+lifecycleRuntimeKtxVersion = "2.8.7"
 lottieComposeVersion = "6.4.0"
 mapsComposeVersion = "11.2.2"
-messagebarcomposeVersion = "1.0.8"
-navigationComposeVersion = "2.8.0"
+messagebarcomposeVersion = "1.0.5"
+navigationComposeVersion = "2.8.3"
 playServicesLocationVersion = "21.3.0"
 retrofitVersion = "2.11.0"
 roomVersion = "2.6.1"
-mongoDbRealmVersion = "2.1.0"
-kotlinCoroutinesVersion = "1.8.1"
+kotlinCoroutinesVersion = "1.9.0"
 firebasePluginVersion = "4.4.2"
-firebaseBomVersion = "33.3.0"
+firebaseBomVersion = "33.5.1"
+kotlinxSerializationVersion = "1.7.2"
 
 [libraries]
 android = { module = "com.mapbox.maps:android", version.ref = "androidVersion" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissionsVersion" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityComposeVersion" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
@@ -64,37 +64,37 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomVersion" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomVersion" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
-auth0 = { module = "com.auth0.android:auth0", version.ref = "auth0Version" }
-coil = { module = "io.coil-kt:coil-compose", version.ref = "coilVersion" }
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilVersion" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coilVersion" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilVersion" }
 compose-calendar = { module = "com.kizitonwose.calendar:compose", version.ref = "composeCalendarVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofitVersion" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libsVersion" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidVersion" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroidVersion" }
 junit = { module = "junit:junit", version.ref = "junitVersion" }
-jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecodeVersion" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieComposeVersion" }
 maps-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapsComposeVersion" }
-message-bar-compose = { module = "com.github.stevdza-san:MessageBarCompose", version.ref = "messagebarcomposeVersion" }
+message-bar-compose = { module = "com.stevdza-san:messagebarkmp", version.ref = "messagebarcomposeVersion" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocationVersion" }
+recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "recaptchaVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
 vico-compose = { module = "com.patrykandpatrick.vico:compose", version.ref = "vicoComposeVersion" }
-realmBase = { module = "io.realm.kotlin:library-base", version.ref = "mongoDbRealmVersion" }
-realmSync = { module = "io.realm.kotlin:library-sync", version.ref = "mongoDbRealmVersion" }
 coroutinesSupport = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutinesVersion" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-ktx = { group = "com.google.firebase", name = "firebase-common-ktx" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+kotlinxSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "androidGradleVersion" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+org-jetbrains-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 daggerHilt = { id = "com.google.dagger.hilt.android", version.ref = "daggerHiltVersion" }
 googleSecrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsPluginVersion" }
 googleKsp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
-mongoDbRealm = { id = "io.realm.kotlin", version.ref = "mongoDbRealmVersion" }
 firebase = { id = "com.google.gms.google-services", version.ref = "firebasePluginVersion" }
 

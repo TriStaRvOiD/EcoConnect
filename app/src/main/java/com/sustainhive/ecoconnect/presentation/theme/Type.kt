@@ -23,29 +23,25 @@ val JosefinSans = FontFamily(
     Font(R.font.josefinsans_thin_italic),
 )
 
-// Set of Material typography styles to start with
+private val defaultTypography = Typography()
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    displayLarge = defaultTypography.displayLarge.copy(fontFamily = JosefinSans),
+    displayMedium = defaultTypography.displayMedium.copy(fontFamily = JosefinSans),
+    displaySmall = defaultTypography.displaySmall.copy(fontFamily = JosefinSans),
+
+    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = JosefinSans),
+    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = JosefinSans),
+    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = JosefinSans),
+
+    titleLarge = defaultTypography.titleLarge.copy(fontFamily = JosefinSans),
+    titleMedium = defaultTypography.titleMedium.copy(fontFamily = JosefinSans),
+    titleSmall = defaultTypography.titleSmall.copy(fontFamily = JosefinSans),
+
+    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = JosefinSans),
+    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = JosefinSans),
+    bodySmall = defaultTypography.bodySmall.copy(fontFamily = JosefinSans),
+
+    labelLarge = defaultTypography.labelLarge.copy(fontFamily = JosefinSans),
+    labelMedium = defaultTypography.labelMedium.copy(fontFamily = JosefinSans),
+    labelSmall = defaultTypography.labelSmall.copy(fontFamily = JosefinSans)
 )

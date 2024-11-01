@@ -6,13 +6,13 @@ plugins {
 
     alias(libs.plugins.compose.compiler) apply false
 
+    alias(libs.plugins.org.jetbrains.kotlinx.serialization) apply false
+
     alias(libs.plugins.daggerHilt) apply false
 
     alias(libs.plugins.googleSecrets) apply false
 
     alias(libs.plugins.googleKsp) apply false
-
-//    alias(libs.plugins.mongoDbRealm) apply false
 
     alias(libs.plugins.firebase) apply false
 }

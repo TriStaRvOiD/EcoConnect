@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.org.jetbrains.kotlinx.serialization)
     alias(libs.plugins.daggerHilt)
-//    alias(libs.plugins.mongoDbRealm)
     alias(libs.plugins.googleSecrets)
     alias(libs.plugins.googleKsp)
     alias(libs.plugins.firebase)
@@ -11,12 +11,12 @@ plugins {
 
 android {
     namespace = "com.sustainhive.ecoconnect"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sustainhive.ecoconnect"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -55,18 +55,18 @@ android {
 
 dependencies {
 
+    //Haze
+//    implementation(libs.haze)
+
+    //reCaptcha
+    implementation(libs.recaptcha)
+
     //Coil
     implementation(libs.coil)
+    implementation(libs.coil.gif)
+    implementation(libs.coil.network.okhttp)
 
-    //Auth0
-//    implementation(libs.auth0)
-//    implementation(libs.jwtdecode)
-
-    //Realm
-//    implementation(libs.realmBase)
-//    implementation(libs.realmSync)
-
-//    Firebase
+    //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
@@ -122,6 +122,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.animation)
+
+    //KotlinX Serialization Json
+    implementation(libs.kotlinxSerialization)
 
     //Miscellaneous
     implementation(libs.androidx.core.ktx)
