@@ -54,5 +54,11 @@ Unfortunately this app currently only supports English, however this will most l
 
 This application's code is available under a GPL v3 license. This excludes the icons, fonts, logos, assets and animations used.
 
+## Attribution
+
+* This application uses animations from [Lottie Files](https://lottiefiles.com)
+* This application uses the "Josefin Sans" font family from [Google Fonts](https://fonts.google.com)
+* This application uses icons from [SVGRepo](https://www.svgrepo.com/)
+
 ## Notice
 This application's logo was created using AI ([Leonardo.Ai](https://leonardo.ai/))
