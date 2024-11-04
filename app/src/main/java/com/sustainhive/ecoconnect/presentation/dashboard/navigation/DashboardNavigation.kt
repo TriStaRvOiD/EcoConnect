@@ -159,18 +159,11 @@ fun DashboardNavigation(
                 )
             }
 
-            composable<DashboardScreen.Settings> {
-                val viewModel: SettingsViewModel = hiltViewModel()
-                val userData by viewModel.userData.collectAsStateWithLifecycle()
-                SettingsScreen(
-                    userData = userData,
-                    internalPaddingValues = paddingValues,
-                    isRefreshing = viewModel.isRefreshing,
-                    onRefresh = {
-                        viewModel.getUserDetails()
-                    }
-                )
-            }
+            settingsNavigation(
+                navController = navController,
+                internalPaddingValues = paddingValues,
+                modifyBottomBarVisibility = modifyBottomBarVisibility
+            )
 
             composable<DashboardScreen.EventDetails> { navBackStackEntry ->
                 val commonViewModel =

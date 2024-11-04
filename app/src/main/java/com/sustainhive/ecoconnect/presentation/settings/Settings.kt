@@ -1,6 +1,8 @@
 package com.sustainhive.ecoconnect.presentation.settings
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.sustainhive.ecoconnect.R
 import com.sustainhive.ecoconnect.data.user.model.User
+import com.sustainhive.ecoconnect.presentation.settings.navigation.SettingsScreen
 import com.sustainhive.ecoconnect.presentation.util.components.LoadingAnimation
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,14 +54,14 @@ fun SettingsScreen(
     internalPaddingValues: PaddingValues,
     userData: User?,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onItemClick: (SettingsScreen) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
     Scaffold(
         modifier = modifier
-            .fillMaxSize()
-            .padding(internalPaddingValues),
+            .fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
@@ -74,11 +80,25 @@ fun SettingsScreen(
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp),
         ) {
-            OutlinedCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .padding(8.dp),
+            val cardModifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp)
+                .padding(8.dp)
+                .then(
+                    if (!isSystemInDarkTheme()) {
+                        Modifier.border(
+                            1.dp,
+                            MaterialTheme.colorScheme.onSurface,
+                            shape = CardDefaults.shape
+                        )
+                    } else Modifier
+                )
+
+            Card(
+                modifier = cardModifier,
+                colors = CardDefaults.cardColors().copy(
+                    containerColor = MaterialTheme.colorScheme.surface
+                ),
                 onClick = {
 
                 }
@@ -93,14 +113,15 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
-                                .padding(start = 4.dp),
+                                .padding(8.dp)
+                                .padding(start = 14.dp),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             AsyncImage(
                                 modifier = Modifier
-                                    .size(87.dp)
-                                    .clip(CircleShape),
+                                    .size(90.dp)
+                                    .clip(CircleShape)
+                                    .border(1.dp, MaterialTheme.colorScheme.onSurface, CircleShape),
                                 model = userData.profileImage,
                                 contentDescription = "Profile photo",
                                 contentScale = ContentScale.Crop
@@ -133,16 +154,23 @@ fun SettingsScreen(
 
             SettingsSection(
                 items = listOf(
-                    SettingItem(ImageVector.vectorResource(R.drawable.user), "Account"),
+                    SettingItem(
+                        ImageVector.vectorResource(R.drawable.user),
+                        label = "Account",
+                        screen = SettingsScreen.Account
+                    ),
                     SettingItem(
                         ImageVector.vectorResource(R.drawable.devices),
-                        "Linked Devices"
+                        label = "Linked Devices",
+                        screen = SettingsScreen.LinkedDevices
                     ),
                     SettingItem(
                         ImageVector.vectorResource(R.drawable.permissions),
-                        "Permissions"
+                        label = "Permissions",
+                        screen = SettingsScreen.Permissions
                     )
-                )
+                ),
+                onItemClick = onItemClick
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -151,42 +179,84 @@ fun SettingsScreen(
                 items = listOf(
                     SettingItem(
                         ImageVector.vectorResource(R.drawable.appearance),
-                        "Appearance"
+                        label = "Appearance",
+                        screen = SettingsScreen.Appearance
                     ),
                     SettingItem(
                         ImageVector.vectorResource(R.drawable.notifications),
-                        "Notifications"
+                        label = "Notifications",
+                        screen = SettingsScreen.Notifications
                     ),
-                    SettingItem(ImageVector.vectorResource(R.drawable.privacy), "Privacy"),
-                    SettingItem(ImageVector.vectorResource(R.drawable.info_circle), "About")
-                )
+                    SettingItem(
+                        ImageVector.vectorResource(R.drawable.privacy),
+                        label = "Privacy",
+                        screen = SettingsScreen.Privacy
+                    ),
+                    SettingItem(
+                        ImageVector.vectorResource(R.drawable.info_circle),
+                        label = "About",
+                        screen = SettingsScreen.About
+                    )
+                ),
+                onItemClick = onItemClick
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             SettingsSection(
                 items = listOf(
-                    SettingItem(ImageVector.vectorResource(R.drawable.feedback), "Feedback"),
-                )
+                    SettingItem(
+                        ImageVector.vectorResource(
+                            R.drawable.feedback
+                        ),
+                        label = "Feedback",
+                        screen = SettingsScreen.Feedback
+                    ),
+                ),
+                onItemClick = onItemClick
             )
+
+            Spacer(modifier = Modifier.height(internalPaddingValues.calculateBottomPadding()))
         }
     }
 }
 
 @Composable
-fun SettingsSection(items: List<SettingItem>) {
-    OutlinedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
+fun SettingsSection(
+    items: List<SettingItem>,
+    onItemClick: (SettingsScreen) -> Unit
+) {
+    val cardModifier = Modifier.fillMaxWidth()
+        .padding(8.dp)
+        .then(
+            if (!isSystemInDarkTheme()) {
+                Modifier.border(
+                    1.dp,
+                    MaterialTheme.colorScheme.onSurface,
+                    shape = CardDefaults.shape
+                )
+            } else Modifier
+        )
+    Card(
+        modifier = cardModifier,
+        colors = CardDefaults.cardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
-        items.forEach { item ->
-            SettingRow(item)
-            HorizontalDivider(
-                modifier = Modifier.padding(start = 55.dp),
-                thickness = 0.5.dp,
-                color = Color.DarkGray
+        items.forEachIndexed { index, item ->
+            SettingRow(
+                item,
+                onClick = {
+                    onItemClick(item.screen)
+                }
             )
+            if (index < items.size - 1) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(start = 55.dp),
+                    thickness = 0.5.dp,
+                    color = Color.DarkGray
+                )
+            }
         }
     }
 }
@@ -194,7 +264,7 @@ fun SettingsSection(items: List<SettingItem>) {
 @Composable
 fun SettingRow(
     setting: SettingItem,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit
 ) {
     Column {
         Box(
@@ -210,7 +280,8 @@ fun SettingRow(
                 Icon(
                     imageVector = setting.icon,
                     contentDescription = setting.label,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Row(
@@ -227,7 +298,6 @@ fun SettingRow(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.arrow_right),
                         contentDescription = "Go to ${setting.label}",
-                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
                     )
                 }
             }
@@ -235,4 +305,8 @@ fun SettingRow(
     }
 }
 
-data class SettingItem(val icon: ImageVector, val label: String)
+data class SettingItem(
+    val icon: ImageVector,
+    val label: String,
+    val screen: SettingsScreen
+)
