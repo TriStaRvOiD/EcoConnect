@@ -12,6 +12,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +27,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -78,6 +81,13 @@ fun EventCard(
             .width(300.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.outlinedCardColors().copy(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(
+            width = 0.7.dp,
+            color = Color.Gray
+        ),
         onClick = {
             hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
             onClick()
@@ -132,7 +142,6 @@ fun EventCard(
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 1,
-                        fontWeight = FontWeight.Bold,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
@@ -195,16 +204,16 @@ fun EventCard(
                             if (!showSecondText) {
                                 Text(
                                     modifier = Modifier.padding(top = 4.dp),
-                                    text = "Scheduled on ${event.date} at ${event.time}",
+                                    text = "At ${event.time} on ${event.date} ",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.6f)
                                 )
                             } else {
                                 Text(
                                     modifier = Modifier.padding(top = 4.dp),
                                     text = "15 km away",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                                    color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.6f)
                                 )
                             }
                         }
@@ -214,7 +223,7 @@ fun EventCard(
                             modifier = Modifier.padding(top = 4.dp),
                             text = "15 km away",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.secondary.copy(alpha = 0.6f)
                         )
                     }
                     Icon(
