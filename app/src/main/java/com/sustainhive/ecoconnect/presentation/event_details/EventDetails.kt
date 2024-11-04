@@ -140,13 +140,14 @@ fun SharedTransitionScope.EventDetailsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
-                                .padding(16.dp),
+                                .padding(vertical = 16.dp),
                             state = carouselState,
                             itemWidth = 300.dp,
                             itemSpacing = 12.dp,
                         ) { index ->
+                            val modifier = if (index == 0) Modifier.padding(start = 8.dp) else Modifier
                             SubcomposeAsyncImage(
-                                modifier = Modifier
+                                modifier = modifier
                                     .height(200.dp)
                                     .fillMaxWidth()
                                     .sharedElement(
