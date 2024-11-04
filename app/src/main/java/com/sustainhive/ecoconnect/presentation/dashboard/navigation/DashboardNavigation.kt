@@ -31,8 +31,7 @@ import com.sustainhive.ecoconnect.presentation.manage.ManageScreen
 import com.sustainhive.ecoconnect.presentation.manage.ManageViewModel
 import com.sustainhive.ecoconnect.presentation.nearby.NearbyScreen
 import com.sustainhive.ecoconnect.presentation.root_navigation.Graph
-import com.sustainhive.ecoconnect.presentation.settings.SettingsScreen
-import com.sustainhive.ecoconnect.presentation.settings.SettingsViewModel
+import com.sustainhive.ecoconnect.presentation.settings.navigation.settingsNavigation
 import com.sustainhive.ecoconnect.presentation.util.BackPress
 import com.sustainhive.ecoconnect.presentation.util.sharedViewModel
 import kotlinx.coroutines.delay
@@ -54,6 +53,9 @@ fun DashboardNavigation(
             startDestination = DashboardScreen.Home
         ) {
             composable<DashboardScreen.Home> { navBackStackEntry ->
+                LaunchedEffect(Unit) {
+                    modifyBottomBarVisibility(true)
+                }
                 val commonViewModel =
                     navBackStackEntry.sharedViewModel<DashboardCommonViewModel>(navController = navController)
                 val viewModel: HomeViewModel = hiltViewModel()
@@ -114,10 +116,16 @@ fun DashboardNavigation(
             }
 
             composable<DashboardScreen.Nearby> {
+                LaunchedEffect(Unit) {
+                    modifyBottomBarVisibility(true)
+                }
                 NearbyScreen(modifier = Modifier.padding(paddingValues))
             }
 
             composable<DashboardScreen.Manage> { navBackStackEntry ->
+                LaunchedEffect(Unit) {
+                    modifyBottomBarVisibility(true)
+                }
                 val commonViewModel =
                     navBackStackEntry.sharedViewModel<DashboardCommonViewModel>(navController = navController)
                 val viewModel: ManageViewModel = hiltViewModel()
