@@ -178,7 +178,7 @@ fun BottomNavigationBar(
     onTabSelected: (Int, BottomBarTab) -> Unit,
 ) {
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
     ) {
         tabs.forEachIndexed { index, tab ->
             val alpha by animateFloatAsState(
